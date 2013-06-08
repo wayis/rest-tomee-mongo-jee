@@ -15,7 +15,9 @@ public class DBConnection {
 
     @PostConstruct
     public void afterCreate() throws UnknownHostException {
+        // TODO: Retrieve database host and port from a properties config file
         MongoClient client = new MongoClient();
+        // TODO: Retrieve database name from a properties config file
         database = client.getDB("blog");
     }
 
