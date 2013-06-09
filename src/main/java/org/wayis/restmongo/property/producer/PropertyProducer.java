@@ -3,13 +3,11 @@ package org.wayis.restmongo.property.producer;
 
 import org.wayis.restmongo.property.annotation.Property;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
-import javax.ws.rs.Produces;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
-@ApplicationScoped
 public class PropertyProducer {
 
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("database");
@@ -17,8 +15,21 @@ public class PropertyProducer {
 
     @Produces
     @Property
-    public String getProperty(InjectionPoint p) {
-        System.out.println("PropertyProducer bundle: " + BUNDLE);
+    public String getStringProperty(InjectionPoint p) {
+        return getPropertyValue(p);
+    }
+
+    @Produces
+    @Property
+    public Integer getIntegerProperty(InjectionPoint p) {
+        final String value = getPropertyValue(p);
+        if (value == null) {
+            return null;
+        }
+        return Integer.parseInt(value);
+    }
+
+    private String getPropertyValue(InjectionPoint p) {
         final Property property = p.getAnnotated().getAnnotation(Property.class);
         final String propertyKey = property.key();
         // TODO: replace by StringUtils
