@@ -35,11 +35,12 @@ public class BlogServiceTest {
     @Test
     public void testList() throws IOException, JSONException {
         JSONArray posts = new JSONArray(IO.slurp(new URL("http://localhost:4204/test/api/blog/list")));
-        assertEquals(4, posts.length());
+        assertEquals(1000, posts.length());
     }
 
+    @Test
     public void testFindById() throws IOException, JSONException {
-        final String postId = "XXXXXX";
+        final String postId = "5143ddf3bcf1bf4ab37d9c6d";
         JSONObject post = new JSONObject(IO.slurp(new URL("http://localhost:4204/test/api/blog/get/" + postId)));
 
         assertNotNull(post);
