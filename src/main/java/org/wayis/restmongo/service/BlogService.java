@@ -11,6 +11,7 @@ import org.wayis.restmongo.mongo.DBConnection;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -31,12 +32,16 @@ public class BlogService {
     }
 
     @Path("/list")
+    @GET
     public DBCursor list() {
+        System.out.println(posts.find());
         return posts.find();
     }
 
     @Path("/get/{postId}")
+    @GET
     public DBObject findById(@PathParam("postId") final String postId) {
+        System.out.println(posts.findOne(new BasicDBObject("_id", new ObjectId(postId))));
         return posts.findOne(new BasicDBObject("_id", new ObjectId(postId)));
     }
 
