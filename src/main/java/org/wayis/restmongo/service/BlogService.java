@@ -34,14 +34,12 @@ public class BlogService {
     @Path("/list")
     @GET
     public DBCursor list() {
-        System.out.println(posts.find());
         return posts.find();
     }
 
     @Path("/get/{postId}")
     @GET
     public DBObject findById(@PathParam("postId") final String postId) {
-        System.out.println(posts.findOne(new BasicDBObject("_id", new ObjectId(postId))));
         return posts.findOne(new BasicDBObject("_id", new ObjectId(postId)));
     }
 
