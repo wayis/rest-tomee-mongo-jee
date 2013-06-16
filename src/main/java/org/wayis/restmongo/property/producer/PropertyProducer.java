@@ -1,6 +1,7 @@
 package org.wayis.restmongo.property.producer;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.wayis.restmongo.property.annotation.Property;
 
 import javax.enterprise.inject.Produces;
@@ -32,13 +33,11 @@ public class PropertyProducer {
     private String getPropertyValue(InjectionPoint p) {
         final Property property = p.getAnnotated().getAnnotation(Property.class);
         final String propertyKey = property.key();
-        // TODO: replace by StringUtils
-        if (propertyKey == null || propertyKey.length() == 0) {
+        if (StringUtils.isEmpty(propertyKey)) {
             return property.defaultValue();
         }
         final String value = BUNDLE.getString(propertyKey);
-        // TODO: replace by StringUtils
-        if (value == null || value.length() == 0) {
+        if (StringUtils.isEmpty(value)) {
             if (property.mandatory()) {
                 throw new IllegalStateException(MessageFormat.format(MANDATORY_MSG, propertyKey));
             } else {
