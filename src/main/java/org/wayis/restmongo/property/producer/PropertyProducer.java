@@ -7,6 +7,7 @@ import org.wayis.restmongo.property.annotation.Property;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import java.text.MessageFormat;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class PropertyProducer {
@@ -34,16 +35,31 @@ public class PropertyProducer {
         final Property property = p.getAnnotated().getAnnotation(Property.class);
         final String propertyKey = property.key();
         if (StringUtils.isEmpty(propertyKey)) {
-            return property.defaultValue();
-        }
-        final String value = BUNDLE.getString(propertyKey);
-        if (StringUtils.isEmpty(value)) {
             if (property.mandatory()) {
                 throw new IllegalStateException(MessageFormat.format(MANDATORY_MSG, propertyKey));
             } else {
                 return property.defaultValue();
             }
         }
+        String value = null;
+        try {
+            value = BUNDLE.getString(propertyKey);
+            if (StringUtils.isEmpty(value)) {
+                if (property.mandatory()) {
+                    throw new IllegalStateException(MessageFormat.format(MANDATORY_MSG, propertyKey));
+                } else {
+                    return property.defaultValue();
+                }
+            }
+        } catch (MissingResourceException e) {
+            if (property.mandatory()) {
+                throw new IllegalStateException(MessageFormat.format(MANDATORY_MSG, propertyKey));
+            } else {
+                return property.defaultValue();
+            }
+        }
+
         return value;
     }
+
 }
