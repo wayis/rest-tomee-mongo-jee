@@ -27,9 +27,7 @@ public class DBConnection {
     @PostConstruct
     public void afterCreate() throws UnknownHostException {
         MongoClient client = new MongoClient(host, port);
-        System.out.println("MongoClient build: " + client);
         database = client.getDB(dbName);
-        System.out.println("Database retrieved: " + database);
     }
 
     public DBCollection getCollection(String name) {
